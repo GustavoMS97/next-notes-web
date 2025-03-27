@@ -51,7 +51,7 @@ const config = [
           patterns: [
             {
               group: ['**/src/*', '.*', '../*', './*'],
-              message: 'Use @/ instead of relative imports'
+              message: 'Use @src/ instead of relative imports'
             }
           ]
         }
