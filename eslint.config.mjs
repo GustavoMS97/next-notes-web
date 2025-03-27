@@ -5,6 +5,7 @@ import { FlatCompat } from '@eslint/eslintrc'
 import prettierPlugin from 'eslint-plugin-prettier'
 import typescriptPlugin from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
+import eslintPluginImport from 'eslint-plugin-import'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -15,12 +16,19 @@ const compat = new FlatCompat({
 })
 
 const config = [
-  ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'next', 'next/core-web-vitals'),
+  ...compat.extends(
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'next',
+    'next/core-web-vitals'
+  ),
 
   {
     files: ['**/*.{js,ts,jsx,tsx}'],
     languageOptions: {
-      parser: tsParser, // 👈 usar o objeto aqui
+      parser: tsParser,
       parserOptions: {
         sourceType: 'module',
         ecmaVersion: 'latest',
@@ -28,8 +36,21 @@ const config = [
       }
     },
     plugins: {
+      import: eslintPluginImport,
       '@typescript-eslint': typescriptPlugin,
       prettier: prettierPlugin
+    },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+          paths: ['src']
+        },
+        alias: {
+          map: [['@src', './src']],
+          extensions: ['.ts', '.tsx', '.js', '.jsx']
+        }
+      }
     },
     rules: {
       'prettier/prettier': 'error',
@@ -64,7 +85,7 @@ const config = [
           allowNullish: true
         }
       ],
-      'import/no-relative-parent-imports': 'error',
+      'import/no-relative-parent-imports': 'off',
       'import/order': [
         'error',
         {
