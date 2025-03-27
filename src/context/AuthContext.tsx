@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, JSX, useContext, useEffect, useState } from 'react'
+
 import { api } from '@src/lib/axios'
 
 type User = {

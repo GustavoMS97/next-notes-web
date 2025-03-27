@@ -1,4 +1,5 @@
 import { JSX } from 'react'
+
 import '@src/styles/globals.css'
 import { AuthProvider } from '@src/context/AuthContext'
 
