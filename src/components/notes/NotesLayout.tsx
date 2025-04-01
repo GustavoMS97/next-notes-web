@@ -1,6 +1,7 @@
 'use client'
 
 import { JSX } from 'react'
+import { Plus } from 'lucide-react'
 
 import { NoteList } from '@src/components/notes/NoteList'
 import { NoteEditor } from '@src/components/notes/NoteEditor'
@@ -41,9 +42,16 @@ export function NotesLayout(): JSX.Element {
       </div>
 
       <div className="fixed bottom-4 right-4">
-        <button onClick={createNote} className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">
-          + New Note
-        </button>
+        <div className="fixed bottom-4 right-4">
+          <button
+            onClick={createNote}
+            aria-label="Create new note"
+            className="bg-black text-white p-4 rounded-full shadow-md hover:bg-gray-800
+            transition focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </div>
     </>
   )

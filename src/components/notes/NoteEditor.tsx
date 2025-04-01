@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, JSX } from 'react'
+import { Trash } from 'lucide-react'
 
 import { Note } from '@src/features/notes/services/note.service'
 
@@ -56,17 +57,20 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
         placeholder="Write your note here..."
       />
 
-      <button
-        onClick={() => {
-          const confirmDelete = confirm('Are you sure you want to delete this note?')
-          if (confirmDelete) {
-            onDelete(note._id)
-          }
-        }}
-        className="mt-4 text-sm text-red-600 hover:underline"
-      >
-        Delete this note
-      </button>
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={() => {
+            const confirmDelete = confirm('Are you sure you want to delete this note?')
+            if (confirmDelete) {
+              onDelete(note._id)
+            }
+          }}
+          className="text-gray-400 hover:text-red-500 transition cursor-pointer"
+          aria-label="Delete note"
+        >
+          <Trash size={18} />
+        </button>
+      </div>
     </main>
   )
 }

@@ -65,7 +65,7 @@ const config = [
       '@/quotes': ['error', 'single', { allowTemplateLiterals: true }],
       '@typescript-eslint/no-use-before-define': ['error'],
       '@typescript-eslint/no-shadow': ['error'],
-      'max-len': ['error', { code: 140 }],
+      'max-len': ['error', { code: 150 }],
       'no-restricted-imports': [
         'error',
         {
