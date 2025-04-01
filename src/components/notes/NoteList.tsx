@@ -3,14 +3,14 @@
 import { JSX } from 'react'
 
 type Note = {
-  id: string
+  _id: string
   title: string
 }
 
 type NoteListProps = {
   notes: Note[]
   selectedNoteId: string | null
-  onSelect: (id: string) => void
+  onSelect: (_id: string) => void
 }
 
 export function NoteList({ notes, selectedNoteId, onSelect }: NoteListProps): JSX.Element {
@@ -23,10 +23,10 @@ export function NoteList({ notes, selectedNoteId, onSelect }: NoteListProps): JS
         ) : (
           notes.map((note) => (
             <li
-              key={note.id}
-              onClick={() => onSelect(note.id)}
+              key={note._id}
+              onClick={() => onSelect(note._id)}
               className={`cursor-pointer p-2 rounded transition ${
-                note.id === selectedNoteId ? 'bg-black text-white' : 'hover:bg-gray-200'
+                note._id === selectedNoteId ? 'bg-black text-white' : 'hover:bg-gray-200'
               }`}
             >
               {note.title || 'Untitled'}

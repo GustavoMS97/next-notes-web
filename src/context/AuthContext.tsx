@@ -5,7 +5,7 @@ import { createContext, JSX, useContext, useEffect, useState } from 'react'
 import { api } from '@src/lib/axios'
 
 type User = {
-  id: string
+  _id: string
   name: string
   email: string
 }
