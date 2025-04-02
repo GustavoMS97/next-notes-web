@@ -1,10 +1,13 @@
 'use client'
 
 import { useState, useRef, useEffect, JSX } from 'react'
+import { User } from 'lucide-react'
 
 import { useAuth } from '@src/context/AuthContext'
 
-export function Header(): JSX.Element | null {
+type HeaderProps = {}
+
+export function Header({}: HeaderProps): JSX.Element | null {
   const { user, logout } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -24,25 +27,19 @@ export function Header(): JSX.Element | null {
     return null
   }
 
-  const initials = user.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-
   return (
     <header className="w-full flex justify-between items-center border-b p-4 bg-white relative">
-      <h1 className="text-lg font-semibold tracking-tight">My Notes</h1>
+      <div className="flex items-center gap-3">
+        <h1 className="text-lg font-semibold tracking-tight">My Notes</h1>
+      </div>
 
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setShowDropdown((prev) => !prev)}
-          className={
-            'w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold text-sm focus:outline-none cursor-pointer'
-          }
+          className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center focus:outline-none cursor-pointer"
+          aria-label="User menu"
         >
-          {initials}
+          <User size={18} />
         </button>
 
         {showDropdown && (

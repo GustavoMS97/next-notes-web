@@ -1,5 +1,6 @@
 'use client'
 
+import clsx from 'clsx'
 import { JSX } from 'react'
 
 type Note = {
@@ -15,21 +16,22 @@ type NoteListProps = {
 
 export function NoteList({ notes, selectedNoteId, onSelect }: NoteListProps): JSX.Element {
   return (
-    <aside className="w-full md:w-1/3 lg:w-1/4 border-r border-gray-300 p-4 bg-gray-50">
-      <h2 className="text-lg font-semibold mb-4">Your Notes</h2>
-      <ul className="space-y-2">
+    <aside className="flex-1 border-r border-gray-300 bg-gray-50">
+      <ul className="space-y-1">
         {notes.length === 0 ? (
-          <p className="text-sm text-gray-500">No notes found.</p>
+          <p className="text-sm text-gray-500 px-4">No notes found.</p>
         ) : (
           notes.map((note) => (
-            <li
-              key={note._id}
-              onClick={() => onSelect(note._id)}
-              className={`cursor-pointer p-2 rounded transition ${
-                note._id === selectedNoteId ? 'bg-black text-white' : 'hover:bg-gray-200'
-              }`}
-            >
-              {note.title || 'Untitled'}
+            <li key={note._id}>
+              <button
+                onClick={() => onSelect(note._id)}
+                className={clsx(
+                  'w-full text-left py-4 px-6 text-base font-medium transition flex items-center',
+                  note._id === selectedNoteId ? 'bg-black text-white' : 'text-gray-800 hover:bg-gray-200'
+                )}
+              >
+                <span className="truncate w-full">{note.title || 'Untitled note'}</span>
+              </button>
             </li>
           ))
         )}

@@ -25,6 +25,7 @@ type UseNotesReturn = {
 export function useNotes(): UseNotesReturn {
   const { notes, selectedNoteId, setNotes, addNote, updateNoteInState, deleteNoteInState, selectNote } = useNotesStore()
 
+  const [allNotes, setAllNotes] = useState<Note[]>([])
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -40,30 +41,39 @@ export function useNotes(): UseNotesReturn {
   useEffect(() => {
     const load = async (): Promise<void> => {
       setIsLoading(true)
-      const data = await getNotes(debouncedSearch)
+      const data = await getNotes()
+      setAllNotes(data)
       setNotes(data)
       setIsLoading(false)
     }
 
     load()
-  }, [debouncedSearch, setNotes])
+  }, [setNotes])
+
+  useEffect(() => {
+    const filtered = allNotes.filter((note) => note.title.toLowerCase().includes(debouncedSearch.toLowerCase()))
+    setNotes(filtered)
+  }, [debouncedSearch, allNotes, setNotes])
 
   const selectedNote = notes.find((n) => n._id === selectedNoteId) ?? null
 
   const createNote = async (): Promise<void> => {
     const newNote = await createNoteService({ title: 'Untitled', content: ' ' })
     addNote(newNote)
+    setAllNotes((prev) => [newNote, ...prev])
   }
 
   const updateNote = async (partial: Partial<Note>): Promise<void> => {
     if (!selectedNoteId) return
     const updated = await updateNoteService(selectedNoteId, partial)
     updateNoteInState(updated)
+    setAllNotes((prev) => prev.map((note) => (note._id === updated._id ? updated : note)))
   }
 
   const deleteNote = async (_id: string): Promise<void> => {
     await deleteNoteService(_id)
     deleteNoteInState(_id)
+    setAllNotes((prev) => prev.filter((note) => note._id !== _id))
   }
 
   return {

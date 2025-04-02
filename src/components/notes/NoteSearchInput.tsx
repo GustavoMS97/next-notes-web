@@ -1,13 +1,15 @@
 'use client'
 
+import clsx from 'clsx'
 import { JSX, useEffect, useRef } from 'react'
 
 type NoteSearchInputProps = {
   value: string
   onChange: (value: string) => void
+  className?: string
 }
 
-export function NoteSearchInput({ value, onChange }: NoteSearchInputProps): JSX.Element {
+export function NoteSearchInput({ value, onChange, className }: NoteSearchInputProps): JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function NoteSearchInput({ value, onChange }: NoteSearchInputProps): JSX.
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Search notes..."
-      className="w-full border px-3 py-2 rounded text-sm mb-4"
+      className={clsx('px-3 py-3 border outline-none text-sm', className)}
     />
   )
 }

@@ -41,23 +41,17 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
   }, [content, note.content, onChange])
 
   return (
-    <main className="flex-1 p-6">
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
-        className="w-full text-xl font-bold mb-4 border-b pb-2 outline-none"
-      />
+    <main className="flex-1 p-6 flex flex-col pb-15">
+      <div className="flex items-center justify-between mb-4 gap-2">
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+          maxLength={100}
+          className="w-full text-xl font-bold border-b pb-2 outline-none bg-transparent"
+        />
 
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        className="w-full h-[400px] border rounded p-3 text-sm"
-        placeholder="Write your note here..."
-      />
-
-      <div className="flex justify-end mb-2">
         <button
           onClick={() => {
             const confirmDelete = confirm('Are you sure you want to delete this note?')
@@ -65,12 +59,19 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
               onDelete(note._id)
             }
           }}
-          className="text-gray-400 hover:text-red-500 transition cursor-pointer"
+          className="hidden md:inline-block text-gray-400 hover:text-red-500 transition cursor-pointer"
           aria-label="Delete note"
         >
           <Trash size={18} />
         </button>
       </div>
+
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        className="w-full flex-1 border rounded p-3 text-sm resize-none bg-transparent text-white mb-24"
+        placeholder="Write your note here..."
+      />
     </main>
   )
 }
