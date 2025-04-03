@@ -15,7 +15,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({ label, 
       <input
         ref={ref}
         {...rest}
-        className={`w-full border rounded px-3 py-2 text-sm outline-none ${error ? 'border-red-500' : 'border-gray-300'}`}
+        className={`w-full border rounded px-3 py-2 text-sm outline-none ${error ? 'border-red-500' : 'border-[#2c3338]'}`}
       />
       {error && <p className="text-xs text-red-500">{error.message}</p>}
     </div>

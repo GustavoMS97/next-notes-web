@@ -44,8 +44,8 @@ export default function LoginPage(): JSX.Element {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-white shadow-md rounded-lg p-6 space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#1C1C1E] px-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-[#1C1C1E] shadow-md rounded-lg p-6 space-y-4">
         <h1 className="text-2xl font-bold text-center">Login</h1>
 
         {formError && <div className="bg-red-100 text-red-700 p-2 rounded text-sm text-center">{formError}</div>}
