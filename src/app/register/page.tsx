@@ -43,19 +43,37 @@ export default function RegisterPage(): JSX.Element {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-white shadow-md rounded-lg p-6 space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#1E1F22] px-4 text-white">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-[#2C2E31] shadow-xl rounded-xl p-6 space-y-6">
         <h1 className="text-2xl font-bold text-center">Create Account</h1>
 
-        {formError && <div className="bg-red-100 text-red-700 p-2 rounded text-sm text-center">{formError}</div>}
+        {formError && <div className="bg-red-500 text-white p-2 rounded text-sm text-center">{formError}</div>}
 
-        <TextInput label="Name" type="text" {...register('name')} error={errors.name} />
+        <TextInput
+          label="Name"
+          type="text"
+          {...register('name')}
+          error={errors.name}
+          className="bg-[#1E1F22] border border-[#3a3b3e] text-white placeholder-gray-400"
+        />
 
-        <TextInput label="Email" type="email" {...register('email')} error={errors.email} />
+        <TextInput
+          label="Email"
+          type="email"
+          {...register('email')}
+          error={errors.email}
+          className="bg-[#1E1F22] border border-[#3a3b3e] text-white placeholder-gray-400"
+        />
 
-        <TextInput label="Password" type="password" {...register('password')} error={errors.password} />
+        <TextInput
+          label="Password"
+          type="password"
+          {...register('password')}
+          error={errors.password}
+          className="bg-[#1E1F22] border border-[#3a3b3e] text-white placeholder-gray-400"
+        />
 
-        <button type="submit" disabled={isSubmitting} className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition">
+        <button type="submit" disabled={isSubmitting} className="w-full bg-black text-white py-2 rounded font-semibold hover:bg-gray-800 transition">
           {isSubmitting ? 'Creating account...' : 'Register'}
         </button>
       </form>

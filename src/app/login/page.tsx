@@ -75,6 +75,12 @@ export default function LoginPage(): JSX.Element {
         >
           {isSubmitting ? 'Logging in...' : 'Login'}
         </button>
+        <p className="text-sm text-center text-gray-400">
+          Don’t have an account?{' '}
+          <a href="/register" className="text-white underline hover:text-gray-200 transition">
+            Sign up
+          </a>
+        </p>
       </form>
     </div>
   )
