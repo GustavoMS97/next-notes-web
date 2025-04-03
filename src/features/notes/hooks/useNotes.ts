@@ -33,7 +33,7 @@ export function useNotes(): UseNotesReturn {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedSearch(search)
-    }, 300)
+    }, 4000)
 
     return (): void => clearTimeout(timeout)
   }, [search])
