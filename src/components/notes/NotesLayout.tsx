@@ -8,9 +8,10 @@ import { Header } from '@src/components/layout/Header'
 import { MobileDrawer } from '@src/components/layout/MobileDrawer'
 import { useNotes } from '@src/features/notes/hooks/useNotes'
 import { NoteListPanel } from '@src/components/notes/NoteListPanel'
+import { Spinner } from '@src/components/ui/Spinner'
 
 export function NotesLayout(): JSX.Element {
-  const { notes, selectedNote, selectedNoteId, selectNote, createNote, updateNote, deleteNote, search, setSearch, isLoading } = useNotes()
+  const { notes, selectedNote, selectedNoteId, selectNote, createNote, updateNote, deleteNote, search, setSearch, isLoading, isSaving } = useNotes()
 
   const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -44,6 +45,7 @@ export function NotesLayout(): JSX.Element {
             search={search}
             onSearchChange={setSearch}
             onCreate={createNote}
+            isSaving={isSaving}
           />
         </div>
 
@@ -68,6 +70,7 @@ export function NotesLayout(): JSX.Element {
           search={search}
           onSearchChange={setSearch}
           onCreate={createNote}
+          isSaving={isSaving}
         />
       </MobileDrawer>
 
@@ -87,24 +90,34 @@ export function NotesLayout(): JSX.Element {
             <Trash size={18} />
           </button>
         )}
-        <button
-          onClick={createNote}
-          aria-label="Create new note"
-          className="bg-black text-white p-4 rounded-full shadow-md hover:bg-gray-800 transition"
-        >
-          <SquarePen size={20} />
-        </button>
+        {isSaving ? (
+          <button className="bg-black text-white p-4 rounded-full shadow-md hover:bg-gray-800 transition">
+            <Spinner />
+          </button>
+        ) : (
+          <button
+            onClick={createNote}
+            aria-label="Create new note"
+            className="bg-black text-white p-4 rounded-full shadow-md hover:bg-gray-800 transition"
+          >
+            <SquarePen size={20} />
+          </button>
+        )}
       </div>
 
-      <div className="fixed bottom-4 left-4 md:hidden">
-        <button
-          onClick={() => setDrawerOpen(true)}
-          aria-label="Open menu"
-          className="bg-white text-black p-4 rounded-full shadow-md hover:bg-gray-200 transition"
-        >
-          <Menu size={18} />
-        </button>
-      </div>
+      {notes.length ? (
+        <div className="fixed bottom-4 left-4 md:hidden">
+          <button
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
+            className="bg-white text-black p-4 rounded-full shadow-md hover:bg-gray-200 transition"
+          >
+            <Menu size={18} />
+          </button>
+        </div>
+      ) : (
+        true
+      )}
     </>
   )
 }

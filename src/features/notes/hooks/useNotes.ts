@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useNotesStore } from '@src/features/notes/hooks/useNotesStore'
 import {
@@ -15,12 +15,15 @@ type UseNotesReturn = {
   selectedNoteId: string | null
   selectNote: (_id: string) => void
   createNote: () => Promise<void>
-  updateNote: (partial: Partial<Note>) => Promise<void>
+  updateNote: (partial: Partial<Note>) => void
   deleteNote: (_id: string) => Promise<void>
   search: string
   setSearch: (search: string) => void
   isLoading: boolean
+  isSaving: boolean
 }
+
+const DEBOUNCE_TIME = 1000
 
 export function useNotes(): UseNotesReturn {
   const { notes, selectedNoteId, setNotes, addNote, updateNoteInState, deleteNoteInState, selectNote } = useNotesStore()
@@ -29,11 +32,12 @@ export function useNotes(): UseNotesReturn {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedSearch(search)
-    }, 4000)
+    }, DEBOUNCE_TIME)
 
     return (): void => clearTimeout(timeout)
   }, [search])
@@ -63,20 +67,29 @@ export function useNotes(): UseNotesReturn {
     setAllNotes((prev) => [newNote, ...prev])
   }
 
-  const updateNote = async (partial: Partial<Note>): Promise<void> => {
-    if (!selectedNoteId || !selectedNote) return
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    updateNoteInState({
-      ...selectedNote,
-      ...partial
-    })
-
-    try {
-      const updated = await updateNoteService(selectedNoteId, partial)
-      updateNoteInState(updated)
-    } catch (error) {
-      console.error('Failed to update note:', error)
+  const updateNote = (partial: Partial<Note>): void => {
+    if (!selectedNoteId || !selectedNote) {
+      return
     }
+
+    updateNoteInState({ ...selectedNote, ...partial })
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+    }
+    debounceRef.current = setTimeout(async () => {
+      setIsSaving(true)
+      try {
+        const updated = await updateNoteService(selectedNoteId, partial)
+        updateNoteInState(updated)
+      } catch (err) {
+        console.error('Failed to update note:', err)
+      } finally {
+        setIsSaving(false)
+      }
+    }, DEBOUNCE_TIME)
   }
 
   const deleteNote = async (_id: string): Promise<void> => {
@@ -95,6 +108,7 @@ export function useNotes(): UseNotesReturn {
     deleteNote,
     search,
     setSearch,
-    isLoading
+    isLoading,
+    isSaving
   }
 }
