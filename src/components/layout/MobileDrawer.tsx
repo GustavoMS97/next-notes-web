@@ -1,7 +1,6 @@
 'use client'
 
 import { JSX, ReactNode, useEffect } from 'react'
-import { X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type MobileDrawerProps = {
@@ -38,11 +37,6 @@ export function MobileDrawer({ open, onClose, children }: MobileDrawerProps): JS
             onClick={(e): void => e.stopPropagation()}
             className="absolute pb-5 inset-y-0 left-0 w-full max-w-sm bg-[#1C1C1E] shadow-lg overflow-hidden"
           >
-            <div className="flex justify-end mb-4">
-              <button onClick={onClose} aria-label="Close menu" className="text-gray-500 hover:text-black transition">
-                <X size={20} />
-              </button>
-            </div>
             {children}
           </motion.div>
         </motion.div>
