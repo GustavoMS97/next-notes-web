@@ -9,6 +9,8 @@ import {
   deleteNote as deleteNoteService
 } from '@src/features/notes/services/note.service'
 
+const DEBOUNCE_TIME = 1000
+
 type UseNotesReturn = {
   notes: Note[]
   selectedNote: Note | null
@@ -23,8 +25,6 @@ type UseNotesReturn = {
   isSaving: boolean
 }
 
-const DEBOUNCE_TIME = 1000
-
 export function useNotes(): UseNotesReturn {
   const { notes, selectedNoteId, setNotes, addNote, updateNoteInState, deleteNoteInState, selectNote } = useNotesStore()
 
@@ -34,6 +34,11 @@ export function useNotes(): UseNotesReturn {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
 
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
+
+  const selectedNote = notes.find((n) => n._id === selectedNoteId) ?? null
+
+  // Debounce search input
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedSearch(search)
@@ -42,6 +47,7 @@ export function useNotes(): UseNotesReturn {
     return (): void => clearTimeout(timeout)
   }, [search])
 
+  // Load all notes once
   useEffect(() => {
     const load = async (): Promise<void> => {
       setIsLoading(true)
@@ -54,28 +60,25 @@ export function useNotes(): UseNotesReturn {
     load()
   }, [setNotes])
 
+  // Filter notes by debounced search term
   useEffect(() => {
     const filtered = allNotes.filter((note) => note.title.toLowerCase().includes(debouncedSearch.toLowerCase()))
     setNotes(filtered)
   }, [debouncedSearch, allNotes, setNotes])
 
-  const selectedNote = notes.find((n) => n._id === selectedNoteId) ?? null
-
+  // Create new note
   const createNote = async (): Promise<void> => {
     const newNote = await createNoteService({ title: 'Untitled', content: ' ' })
     addNote(newNote)
     setAllNotes((prev) => [newNote, ...prev])
   }
 
-  const debounceRef = useRef<NodeJS.Timeout | null>(null)
-
+  // Update note with debounce
   const updateNote = (partial: Partial<Note>): void => {
     if (!selectedNoteId || !selectedNote) {
       return
     }
-
     updateNoteInState({ ...selectedNote, ...partial })
-
     if (debounceRef.current) {
       clearTimeout(debounceRef.current)
     }
@@ -92,6 +95,7 @@ export function useNotes(): UseNotesReturn {
     }, DEBOUNCE_TIME)
   }
 
+  // Delete note
   const deleteNote = async (_id: string): Promise<void> => {
     await deleteNoteService(_id)
     deleteNoteInState(_id)
