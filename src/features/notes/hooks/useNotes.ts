@@ -64,10 +64,19 @@ export function useNotes(): UseNotesReturn {
   }
 
   const updateNote = async (partial: Partial<Note>): Promise<void> => {
-    if (!selectedNoteId) return
-    const updated = await updateNoteService(selectedNoteId, partial)
-    updateNoteInState(updated)
-    setAllNotes((prev) => prev.map((note) => (note._id === updated._id ? updated : note)))
+    if (!selectedNoteId || !selectedNote) return
+
+    updateNoteInState({
+      ...selectedNote,
+      ...partial
+    })
+
+    try {
+      const updated = await updateNoteService(selectedNoteId, partial)
+      updateNoteInState(updated)
+    } catch (error) {
+      console.error('Failed to update note:', error)
+    }
   }
 
   const deleteNote = async (_id: string): Promise<void> => {
