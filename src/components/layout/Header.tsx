@@ -28,9 +28,9 @@ export function Header({}: HeaderProps): JSX.Element | null {
   }
 
   return (
-    <header className="w-full flex justify-between items-center border-b p-4 bg-white relative">
+    <header className="w-full flex justify-between items-center border-[#2c3338] p-4 bg-[#1C1C1E] relative">
       <div className="flex items-center gap-3">
-        <h1 className="text-lg font-semibold tracking-tight">My Notes</h1>
+        <h1 className="text-lg font-semibold tracking-tight text-white">My Notes</h1>
       </div>
 
       <div className="relative" ref={dropdownRef}>
@@ -43,12 +43,12 @@ export function Header({}: HeaderProps): JSX.Element | null {
         </button>
 
         {showDropdown && (
-          <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-md text-sm z-50">
+          <div className="absolute right-0 mt-2 w-48 bg-[#1C1C1E] border rounded-lg shadow-md text-sm z-50 border-[#2c3338]">
             <div className="p-3 border-b">
               <div className="font-medium">{user.name}</div>
               <div className="text-gray-500">{user.email}</div>
             </div>
-            <button onClick={logout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
+            <button onClick={logout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer">
               Logout
             </button>
           </div>

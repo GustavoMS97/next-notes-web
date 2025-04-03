@@ -36,7 +36,7 @@ export function NotesLayout(): JSX.Element {
 
       <div className="min-h-screen flex flex-col md:flex-row">
         {/* Sidebar desktop */}
-        <div className="hidden md:block w-[300px] xl:w-[360px] border-r border-gray-300">
+        <div className="hidden md:block w-[300px] xl:w-[360px] border-r border-[#2c3338]">
           <NoteListPanel
             notes={notes}
             selectedNoteId={selectedNoteId}

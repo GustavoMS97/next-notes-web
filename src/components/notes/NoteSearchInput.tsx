@@ -23,7 +23,7 @@ export function NoteSearchInput({ value, onChange, className }: NoteSearchInputP
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Search notes..."
-      className={clsx('px-3 py-3 border outline-none text-sm', className)}
+      className={clsx('px-3 py-3 outline-none text-sm', className)}
     />
   )
 }

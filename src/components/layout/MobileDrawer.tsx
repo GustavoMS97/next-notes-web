@@ -36,7 +36,7 @@ export function MobileDrawer({ open, onClose, children }: MobileDrawerProps): JS
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             onClick={(e): void => e.stopPropagation()}
-            className="absolute pb-5 inset-y-0 left-0 w-full max-w-sm bg-white shadow-lg overflow-hidden"
+            className="absolute pb-5 inset-y-0 left-0 w-full max-w-sm bg-[#1C1C1E] shadow-lg overflow-hidden"
           >
             <div className="flex justify-end mb-4">
               <button onClick={onClose} aria-label="Close menu" className="text-gray-500 hover:text-black transition">

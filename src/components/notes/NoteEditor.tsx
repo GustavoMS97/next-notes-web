@@ -41,15 +41,15 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
   }, [content, note.content, onChange])
 
   return (
-    <main className="flex-1 p-6 flex flex-col pb-15">
-      <div className="flex items-center justify-between mb-4 gap-2">
+    <main className="flex-1 pl-2 flex flex-col pb-15">
+      <div className="flex items-center justify-between mb-4 pr-6 gap-2">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
           maxLength={100}
-          className="w-full text-xl font-bold border-b pb-2 outline-none bg-transparent"
+          className="w-full text-xl font-bold pb-2 outline-none bg-transparent pl-4"
         />
 
         <button
@@ -69,7 +69,8 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="w-full flex-1 border rounded p-3 text-sm resize-none bg-transparent text-white mb-24"
+        className="w-full flex-1 rounded p-3 text-sm resize-none text-xl
+        bg-transparent text-white mb-24 focus:outline-none focus:ring-0 focus:border-transparent"
         placeholder="Write your note here..."
       />
     </main>
