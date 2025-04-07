@@ -1,9 +1,14 @@
 'use client'
 
-import { useState, useEffect, JSX } from 'react'
-import { Trash } from 'lucide-react'
+import { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
+import { Trash, Save } from 'lucide-react'
 
 import { Note } from '@src/features/notes/services/note.service'
+
+export type NoteEditorRef = {
+  save: () => void
+  getNoteData: () => { title: string; content: string }
+}
 
 type NoteEditorProps = {
   note: Note
@@ -11,7 +16,7 @@ type NoteEditorProps = {
   onDelete: (id: string) => void
 }
 
-export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.Element {
+export const NoteEditor = forwardRef<NoteEditorRef, NoteEditorProps>(({ note, onChange, onDelete }, ref) => {
   const [title, setTitle] = useState(note.title)
   const [content, setContent] = useState(note.content)
 
@@ -20,30 +25,20 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
     setContent(note.content)
   }, [note])
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (title !== note.title) {
-        onChange({ title })
+  useImperativeHandle(ref, () => ({
+    save: (): void => {
+      if (title !== note.title || content !== note.content) {
+        onChange({ title, content })
       }
-    }, 500)
-
-    return (): void => clearTimeout(timeout)
-  }, [title, note.title, onChange])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (content !== note.content) {
-        onChange({ content })
-      }
-    }, 500)
-
-    return (): void => clearTimeout(timeout)
-  }, [content, note.content, onChange])
+    },
+    getNoteData: (): { title: string; content: string } => ({ title, content })
+  }))
 
   return (
     <main className="flex-1 pl-2 flex flex-col pb-15">
       <div className="flex items-center justify-between mb-4 pr-6 gap-2">
         <input
+          id="note-title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -51,7 +46,17 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
           maxLength={100}
           className="w-full text-xl font-bold pb-2 outline-none bg-transparent pl-4"
         />
-
+        <button
+          onClick={() => {
+            if (title !== note.title || content !== note.content) {
+              onChange({ title, content })
+            }
+          }}
+          className="hidden md:inline-block text-gray-400 hover:text-red-500 transition cursor-pointer"
+          aria-label="Save note"
+        >
+          <Save size={25} />
+        </button>
         <button
           onClick={() => {
             const confirmDelete = confirm('Are you sure you want to delete this note?')
@@ -62,11 +67,12 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
           className="hidden md:inline-block text-gray-400 hover:text-red-500 transition cursor-pointer"
           aria-label="Delete note"
         >
-          <Trash size={18} />
+          <Trash size={25} />
         </button>
       </div>
 
       <textarea
+        id="note-content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         className="w-full flex-1 rounded p-3 text-sm resize-none text-xl
@@ -75,4 +81,6 @@ export function NoteEditor({ note, onChange, onDelete }: NoteEditorProps): JSX.E
       />
     </main>
   )
-}
+})
+
+NoteEditor.displayName = 'NoteEditor'

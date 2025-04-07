@@ -34,9 +34,6 @@ export function useNotes(): UseNotesReturn {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
 
-  const debounceRef = useRef<NodeJS.Timeout | null>(null)
-  const lastContentRef = useRef<string | null>(null)
-
   const selectedNote = notes.find((n) => n._id === selectedNoteId) ?? null
 
   // Debounce search input
@@ -74,30 +71,24 @@ export function useNotes(): UseNotesReturn {
     setAllNotes((prev) => [newNote, ...prev])
   }
 
-  // Update note with debounce
-  const updateNote = (partial: Partial<Note>): void => {
+  const updateNote = async (partial: Partial<Note>): Promise<void> => {
     if (!selectedNoteId || !selectedNote) {
       return
     }
-    // Update local immediately
-    const updatedLocalNote = { ...selectedNote, ...partial }
-    updateNoteInState(updatedLocalNote)
-    // Save current content to ref
-    lastContentRef.current = updatedLocalNote.content
-    // Debounce logic
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current)
+    setIsSaving(true)
+    updateNoteInState({
+      ...selectedNote,
+      ...partial
+    })
+
+    try {
+      const updated = await updateNoteService(selectedNoteId, partial)
+      updateNoteInState(updated)
+    } catch (error) {
+      console.error('Failed to update note:', error)
+    } finally {
+      setIsSaving(false)
     }
-    debounceRef.current = setTimeout(() => {
-      const currentContent = lastContentRef.current
-      if (!currentContent) {
-        return
-      }
-      setIsSaving(true)
-      updateNoteService(selectedNoteId, { content: currentContent })
-        .catch((err) => console.error('Failed to save note:', err))
-        .finally(() => setIsSaving(false))
-    }, DEBOUNCE_TIME)
   }
 
   // Delete note
