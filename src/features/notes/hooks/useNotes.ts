@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useNotesStore } from '@src/features/notes/hooks/useNotesStore'
 import {
